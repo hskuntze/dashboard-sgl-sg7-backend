@@ -25,9 +25,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import br.mil.eb.dashboard_sgl_sg7.dto.UsuarioDTO;
 import br.mil.eb.dashboard_sgl_sg7.dto.UsuarioRegistroDTO;
 import br.mil.eb.dashboard_sgl_sg7.services.UsuarioServico;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
 @RequestMapping(value = "/usuarios")
+@SecurityRequirement(name = "dashboard-sgl-sg7-doc-scheme")
 public class UsuarioControlador {
 
 	@Autowired

@@ -16,6 +16,9 @@ import br.mil.eb.dashboard_sgl_sg7.projections.GeoreferenciamentoCmdo;
 import br.mil.eb.dashboard_sgl_sg7.projections.QtdMaterialBDA;
 import br.mil.eb.dashboard_sgl_sg7.projections.QtdMaterialCidadeEstado;
 import br.mil.eb.dashboard_sgl_sg7.projections.QtdMaterialRM;
+import br.mil.eb.dashboard_sgl_sg7.projections.QtdMaterialTipoEqp;
+import br.mil.eb.dashboard_sgl_sg7.projections.ValorTotalClassificacaoDiariasPassagens;
+import br.mil.eb.dashboard_sgl_sg7.projections.ValorTotalCodAODiariasPassagens;
 
 @Repository
 public interface MaterialOMRepository extends JpaRepository<MaterialOM, String>{
@@ -237,4 +240,69 @@ public interface MaterialOMRepository extends JpaRepository<MaterialOM, String>{
 			+ "GROUP BY CMDO_ODS "
 			+ "ORDER BY QUANTIDADE")
 	List<GeoreferenciamentoCmdo> getQtdGeorefPorCmdo(String cmdo);
+	
+	@Query("SELECT m.subsistema, COUNT(DISTINCT m.sn) "
+			+ "FROM MaterialOM m "
+			+ "WHERE m.subsistema IN ('CTC', 'SAT', 'TAT') "
+			+ "GROUP BY m.subsistema")
+	List<Object[]> getQuantidadeMaterialSubsistema();
+	
+	@Query("SELECT m.subsistema, COUNT(DISTINCT m.sn) "
+			+ "FROM MaterialOM m "
+			+ "WHERE m.subsistema IN ('CTC', 'SAT', 'TAT') "
+			+ "AND m.cmdoOds = :cmdo "
+			+ "GROUP BY m.subsistema")
+	List<Object[]> getQuantidadeMaterialSubsistemaPorCmdo(String cmdo);
+	
+	@Query(value = "SELECT "
+			+ "    SUM(PORTATIL_E + VEICULAR_E + GTR8000_E + PTP_E + MOTOBRIDGE_E + DVRS_E + "
+			+ "        SITE_FIXO_E + SITE_TRANSPORTAVEL_E + HF_V_E + "
+			+ "        HF_MP_E + HF_BASE_E + VHF_HH_E + VHF_V_E + MULTIBANDA_HH_E + "
+			+ "        MULTIBANDA_MP_E + MULTIBANDA_V_E + UHF_HH + UHF_V_E + W_HCLOS_E + "
+			+ "        CC2_E + TPP_1400_E + INFORMATICA_E + "
+			+ "        NO_DE_ACESSO_E + INTERCOM_SOTAS_E + TERMINAL_SATELITAL_E) "
+			+ "        AS Existente,"
+			+ " "
+			+ "    SUM(PORTARIL_P + VEICULAR_P + GTR8000_P + PTP_P + MOTOBRIDGE_P + DVRS_P + "
+			+ "        SITE_FIXO_P + SITE_TRANSPORTAVEL_P + HF_V_P + HF_MP_P + "
+			+ "        HF_Fixo_P + VHF_HH_P + VHF_V_P + MULTIBANDA_HH_P + "
+			+ "        MULTIBANDA_MP_P + MULTIBANDA_V_P + UHF_HH_P + UHF_V_P + "
+			+ "        W_HCLOS_P + CC2_P + INFORMATICA_P + NO_DE_ACESSO_P + "
+			+ "        INTERCOM_SOTAS_P + TERMINAL_SATELITAL_P) "
+			+ "        AS Previsto, "
+			+ "    'EQUIPAMENTO' AS TIPO "
+			+ "FROM sg7.consolidado_tipoeqp_view ", nativeQuery = true)
+	List<QtdMaterialTipoEqp> getQuantidadeMaterialExistentePrevisto();
+	
+	@Query(value = "SELECT "
+			+ "    SUM(PORTATIL_E + VEICULAR_E + GTR8000_E + PTP_E + MOTOBRIDGE_E + DVRS_E + "
+			+ "        SITE_FIXO_E + SITE_TRANSPORTAVEL_E + HF_V_E + "
+			+ "        HF_MP_E + HF_BASE_E + VHF_HH_E + VHF_V_E + MULTIBANDA_HH_E + "
+			+ "        MULTIBANDA_MP_E + MULTIBANDA_V_E + UHF_HH + UHF_V_E + W_HCLOS_E + "
+			+ "        CC2_E + TPP_1400_E + INFORMATICA_E + "
+			+ "        NO_DE_ACESSO_E + INTERCOM_SOTAS_E + TERMINAL_SATELITAL_E) "
+			+ "        AS Existente,"
+			+ " "
+			+ "    SUM(PORTARIL_P + VEICULAR_P + GTR8000_P + PTP_P + MOTOBRIDGE_P + DVRS_P + "
+			+ "        SITE_FIXO_P + SITE_TRANSPORTAVEL_P + HF_V_P + HF_MP_P + "
+			+ "        HF_Fixo_P + VHF_HH_P + VHF_V_P + MULTIBANDA_HH_P + "
+			+ "        MULTIBANDA_MP_P + MULTIBANDA_V_P + UHF_HH_P + UHF_V_P + "
+			+ "        W_HCLOS_P + CC2_P + INFORMATICA_P + NO_DE_ACESSO_P + "
+			+ "        INTERCOM_SOTAS_P + TERMINAL_SATELITAL_P) "
+			+ "        AS Previsto, "
+			+ "    'EQUIPAMENTO' AS TIPO "
+			+ "FROM sg7.consolidado_tipoeqp_view "
+			+ "WHERE Cmdo_Mil_A = :cmdo", nativeQuery = true)
+	List<QtdMaterialTipoEqp> getQuantidadeMaterialExistentePrevistoPorCmdo(String cmdo);
+	
+	@Query(nativeQuery = true, value = "SELECT SUM(VALOR) AS TOTAL, ANO, CLASSIFICACAO "
+			+ "FROM sg7.diarias_passagens "
+			+ "GROUP BY ANO, CLASSIFICACAO")
+	List<ValorTotalClassificacaoDiariasPassagens> getValorTotalClassificacaoDiariasPassagens();
+	
+	@Query(nativeQuery = true, value = "SELECT SUM(VALOR) AS TOTAL, ANO, COD_AO AS 'CODAO' "
+			+ "FROM sg7.diarias_passagens "
+			+ "WHERE COD_AO IN ('147F', '14T5', '20XE', '21A0', '8965') "
+			+ "GROUP BY ANO, COD_AO")
+	List<ValorTotalCodAODiariasPassagens> getValorTotalCodAoDiariasPassagens();
 }
