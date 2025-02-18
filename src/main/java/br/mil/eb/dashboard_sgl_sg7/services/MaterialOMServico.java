@@ -20,6 +20,10 @@ import br.mil.eb.dashboard_sgl_sg7.dto.QtdMaterialCidadeEstadoDTO;
 import br.mil.eb.dashboard_sgl_sg7.dto.QtdMaterialCmdoDTO;
 import br.mil.eb.dashboard_sgl_sg7.dto.QtdMaterialDisponibilidadeDTO;
 import br.mil.eb.dashboard_sgl_sg7.dto.QtdMaterialRmDTO;
+import br.mil.eb.dashboard_sgl_sg7.dto.QtdMaterialSubsistemaDTO;
+import br.mil.eb.dashboard_sgl_sg7.dto.QtdMaterialTipoEqpDTO;
+import br.mil.eb.dashboard_sgl_sg7.dto.ValorTotalClassificacaoDiariasPassagensDTO;
+import br.mil.eb.dashboard_sgl_sg7.dto.ValorTotalCodAoDiariasPassagensDTO;
 import br.mil.eb.dashboard_sgl_sg7.entities.sg7.Coordenadas;
 import br.mil.eb.dashboard_sgl_sg7.entities.sg7.MaterialOM;
 import br.mil.eb.dashboard_sgl_sg7.repositories.sg7.MaterialOMRepository;
@@ -83,6 +87,26 @@ public class MaterialOMServico {
 		Integer qtd = materialOmRepository.getQuantidadeTotalMaterialPorUf(uf);
 		return qtd;
 	}
+	
+	@Transactional(readOnly = true)
+	public List<QtdMaterialSubsistemaDTO> getQuantidadeMaterialSubsistema() {
+		List<Object[]> result = materialOmRepository.getQuantidadeMaterialSubsistema();
+		List<QtdMaterialSubsistemaDTO> qtd = result.stream()
+				.map(row -> new QtdMaterialSubsistemaDTO((String) row[0], ((Long) row[1]).intValue()))
+				.collect(Collectors.toList());
+		
+		return qtd;
+	}
+	
+	@Transactional(readOnly = true)
+	public List<QtdMaterialSubsistemaDTO> getQuantidadeMaterialSubsistemaPorCmdo(String cmdo) {
+		List<Object[]> result = materialOmRepository.getQuantidadeMaterialSubsistemaPorCmdo(cmdo);
+		List<QtdMaterialSubsistemaDTO> qtd = result.stream()
+				.map(row -> new QtdMaterialSubsistemaDTO((String) row[0], ((Long) row[1]).intValue()))
+				.collect(Collectors.toList());
+		
+		return qtd;
+	}
 
 	@Transactional(readOnly = true)
 	public List<QtdMaterialCmdoDTO> getQuantidadeMaterialCmdo() {
@@ -90,6 +114,7 @@ public class MaterialOMServico {
 		List<QtdMaterialCmdoDTO> qtd = result.stream()
 				.map(row -> new QtdMaterialCmdoDTO((String) row[0], ((Long) row[1]).intValue()))
 				.collect(Collectors.toList());
+		
 		return qtd;
 	}
 
@@ -256,5 +281,37 @@ public class MaterialOMServico {
                 );
             })
             .collect(Collectors.toList());
+	}
+	
+	@Transactional(readOnly = true)
+	public List<QtdMaterialTipoEqpDTO> getQtdMaterialExistentePrevisto() {
+		return materialOmRepository.getQuantidadeMaterialExistentePrevisto()
+				.stream()
+				.map(x -> new QtdMaterialTipoEqpDTO(x.getTipo(), x.getExistente(), x.getPrevisto()))
+				.collect(Collectors.toList());
+	}
+	
+	@Transactional(readOnly = true)
+	public List<QtdMaterialTipoEqpDTO> getQtdMaterialExistentePrevistoPorCmdo(String cmdo) {
+		return materialOmRepository.getQuantidadeMaterialExistentePrevistoPorCmdo(cmdo)
+				.stream()
+				.map(x -> new QtdMaterialTipoEqpDTO(x.getTipo(), x.getExistente(), x.getPrevisto()))
+				.collect(Collectors.toList());
+	}
+	
+	@Transactional(readOnly = true)
+	public List<ValorTotalClassificacaoDiariasPassagensDTO> getValorTotalClassificacaoDiariasPassagens() {
+		return materialOmRepository.getValorTotalClassificacaoDiariasPassagens()
+				.stream()
+				.map(x -> new ValorTotalClassificacaoDiariasPassagensDTO(x.getAno(), x.getClassificacao(), x.getTotal()))
+				.collect(Collectors.toList());
+	}
+	
+	@Transactional(readOnly = true)
+	public List<ValorTotalCodAoDiariasPassagensDTO> getValorTotalCodAoDiariasPassagens() {
+		return materialOmRepository.getValorTotalCodAoDiariasPassagens()
+				.stream()
+				.map(x -> new ValorTotalCodAoDiariasPassagensDTO(x.getAno(), x.getCodAo(), x.getTotal()))
+				.collect(Collectors.toList());
 	}
 }

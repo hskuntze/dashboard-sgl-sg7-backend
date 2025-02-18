@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.mil.eb.dashboard_sgl_sg7.dto.QtdChamadoAnoDTO;
 import br.mil.eb.dashboard_sgl_sg7.services.ChamadoServico;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
 @RequestMapping(value = "/chamados")
+@SecurityRequirement(name = "dashboard-sgl-sg7-doc-scheme")
 public class ChamadoController {
 
 	@Autowired

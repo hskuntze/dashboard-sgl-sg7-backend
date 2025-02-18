@@ -6,7 +6,7 @@ import br.mil.eb.dashboard_sgl_sg7.entities.sgl.Material;
 
 public class MaterialDTO implements Serializable {
 	private static final long serialVersionUID = -3204941781541185952L;
-
+	
 	private Long id;
 	private String pn;
 	private String nomenclatura;
@@ -26,10 +26,10 @@ public class MaterialDTO implements Serializable {
 	private String classe;
 	private String idsigelog;
 	private String observacao;
-
+	
 	public MaterialDTO() {
 	}
-
+	
 	public MaterialDTO(Material m) {
 	    this.id = m.getId();
 	    this.pn = m.getPn();

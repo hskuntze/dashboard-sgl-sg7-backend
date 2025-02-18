@@ -28,7 +28,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	@Autowired
 	private JwtTokenStore store;
 
-	private static final String[] PUBLIC = {
+	private static final String[] PUBLIC = { 
 		"/oauth/token", // Endpoint para obtenção de tokens.
 		"/h2-console/**", // Console do banco de dados H2.
 		"/usuarios/registrar", // Registro de novos usuários.
@@ -39,6 +39,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 		"/oms",
 		"/postos"
 	};
+	
+	private static final String[] SWAGGER = {"/swagger-ui-custom.html", "/dashboard-sg7-sgl-openapi/**", "/swagger-ui/**"};
 
 	/**
      * Configura o armazenamento de tokens para o servidor de recursos.
@@ -63,6 +65,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 		}
 
 		http.authorizeRequests(requests -> requests
+				.antMatchers(SWAGGER).permitAll()
 				.antMatchers(PUBLIC).permitAll()
 				.antMatchers("/notas/**").hasAnyAuthority("PERFIL_ADMIN", "PERFIL_OPERADOR_OM", "PERFIL_OPERADOR_NOC", "PERFIL_SLI")
 				.antMatchers("/chamadosad2/**").hasAnyAuthority("PERFIL_ADMIN", "PERFIL_OPERADOR_NOC", "PERFIL_SLI")
@@ -84,7 +87,12 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	@Bean
 	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration corsConfig = new CorsConfiguration();
-		corsConfig.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://172.20.71.150:3000", "http://localhost:3001", "http://172.20.71.150:3001", "http://10.134.0.163:82"));
+		corsConfig.setAllowedOrigins(Arrays.asList("http://localhost:3000", 
+				"http://172.20.71.150:3000", 
+				"http://localhost:3001", 
+				"http://172.20.71.150:3001", 
+				"http://10.134.0.163:82", 
+				"http://10.134.0.163:83"));
 		corsConfig.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE", "PATCH"));
 		corsConfig.setAllowCredentials(true);
 		corsConfig.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
