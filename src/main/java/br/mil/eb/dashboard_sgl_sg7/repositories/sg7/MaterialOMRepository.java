@@ -303,6 +303,7 @@ public interface MaterialOMRepository extends JpaRepository<MaterialOM, String>{
 	@Query(nativeQuery = true, value = "SELECT SUM(VALOR) AS TOTAL, ANO, COD_AO AS 'CODAO' "
 			+ "FROM sg7.diarias_passagens "
 			+ "WHERE COD_AO IN ('147F', '14T5', '20XE', '21A0', '8965') "
-			+ "GROUP BY ANO, COD_AO")
+			+ "GROUP BY ANO, COD_AO "
+			+ "ORDER BY ANO DESC")
 	List<ValorTotalCodAODiariasPassagens> getValorTotalCodAoDiariasPassagens();
 }
