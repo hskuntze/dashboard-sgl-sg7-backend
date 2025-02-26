@@ -36,14 +36,14 @@ public class MaterialOMServico {
 	private MaterialOMRepository materialOmRepository;
 	
 	private static final Map<String, Coordenadas> CMDO_COORDENADAS = Map.of(
-	    "CMS", new Coordenadas("-51.4", "-25.6"),
-	    "CMSE", new Coordenadas("-48.4", "-21"),
-	    "CMP", new Coordenadas("-48.7", "-11.8"),
-	    "CMO", new Coordenadas("-55.1", "-12.3"),
-	    "CMN", new Coordenadas("-52.3", "-2.9"),
-	    "CMNE", new Coordenadas("-40.2", "-6.8"),
-	    "CML", new Coordenadas("-42.8", "-16.8"),
-	    "CMA", new Coordenadas("-65.1", "-2.1")
+	    "CMS", new Coordenadas("-51.2", "-30.1"),
+	    "CMSE", new Coordenadas("-46.6", "-23.5"),
+	    "CMP", new Coordenadas("-47.8", "-15.7"),
+	    "CMO", new Coordenadas("-54.6", "-20.4"),
+	    "CMN", new Coordenadas("-48.4", "-1.4"),
+	    "CMNE", new Coordenadas("-34.9", "-8"),
+	    "CML", new Coordenadas("-43.4", "-22.8"),
+	    "CMA", new Coordenadas("-60", "-3.1")
 	);
 
 	
