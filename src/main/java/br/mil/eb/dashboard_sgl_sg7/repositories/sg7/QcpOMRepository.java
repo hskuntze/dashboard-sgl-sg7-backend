@@ -18,7 +18,8 @@ public interface QcpOMRepository extends JpaRepository<QcpOM, QcpOMId> {
 			+ "LONGI as LONGITUDE, "
 			+ "SUM(QTD_MIL_PREV) as PREVISTO, "
 			+ "SUM(QTD_MIL_EFETIVO) as EFETIVO "
-			+ "FROM `qcp_om_com_exis_prev_view` "
+			+ "FROM qcp_om_com_exis_prev_view "
+			+ "WHERE Cmdo_Mil_A IN ('CMA', 'CMN', 'CMNE', 'CMP', 'CMO', 'CML', 'CMSE', 'CMS') "
 			+ "GROUP BY CMDO")
 	List<GeoreferenciamentoQcpOM> getGeorefQcpOM();
 	

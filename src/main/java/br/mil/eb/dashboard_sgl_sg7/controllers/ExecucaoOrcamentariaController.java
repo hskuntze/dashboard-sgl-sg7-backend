@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.mil.eb.dashboard_sgl_sg7.dto.AcaoOrcamentariaDTO;
 import br.mil.eb.dashboard_sgl_sg7.dto.RestanteValorAnoDTO;
+import br.mil.eb.dashboard_sgl_sg7.dto.SomaOrcamentariaDTO;
 import br.mil.eb.dashboard_sgl_sg7.dto.TipoAcaoValorDTO;
 import br.mil.eb.dashboard_sgl_sg7.dto.UnidadeOrcamentariaDTO;
 import br.mil.eb.dashboard_sgl_sg7.services.ExecucaoOrcamentariaService;
@@ -68,5 +70,20 @@ public class ExecucaoOrcamentariaController {
 	@GetMapping(value = "/tipo")
 	public ResponseEntity<List<TipoAcaoValorDTO>> getValorTipoAcao() {
 		return ResponseEntity.ok().body(execucaoOrcamentariaService.getTipoAcaoValor());
+	}
+	
+	@GetMapping(value = "/soma")
+	public ResponseEntity<SomaOrcamentariaDTO> getSomaOrcamentaria() {
+		return ResponseEntity.ok().body(execucaoOrcamentariaService.getSomaOrcamentaria());
+	}
+	
+	@GetMapping(value = "/acao/2024")
+	public ResponseEntity<List<AcaoOrcamentariaDTO>> getAcaoOrcamentaria2024() {
+		return ResponseEntity.ok().body(execucaoOrcamentariaService.getAcaoOrcamentaria2024());
+	}
+	
+	@GetMapping(value = "/acao/2025")
+	public ResponseEntity<List<AcaoOrcamentariaDTO>> getAcaoOrcamentaria2025() {
+		return ResponseEntity.ok().body(execucaoOrcamentariaService.getAcaoOrcamentaria2025());
 	}
 }

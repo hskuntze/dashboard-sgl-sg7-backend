@@ -7,7 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import br.mil.eb.dashboard_sgl_sg7.entities.sg7.ExecucaoOrcamentaria;
+import br.mil.eb.dashboard_sgl_sg7.projections.AcaoOrcamentaria;
 import br.mil.eb.dashboard_sgl_sg7.projections.RestanteValorAno;
+import br.mil.eb.dashboard_sgl_sg7.projections.SomaOrcamentaria;
 import br.mil.eb.dashboard_sgl_sg7.projections.TipoAcaoValor;
 import br.mil.eb.dashboard_sgl_sg7.projections.UnidadeOrcamentaria;
 
@@ -92,20 +94,32 @@ public interface ExecucaoOrcamentariaRepository extends JpaRepository<ExecucaoOr
 			+ "ORDER BY grupoCodUo")
 	List<UnidadeOrcamentaria> getExecucaoOrcamentaria2024();
 	
+//	@Query(nativeQuery = true, value = "SELECT "
+//			+ "    CASE "
+//			+ "        WHEN agge_exec_orcamentaria.COD_UO = 52121 THEN 'Cmdo Ex' "
+//			+ "        WHEN agge_exec_orcamentaria.COD_UO = 52921 THEN 'F Ex' "
+//			+ "        ELSE 'Destaque' "
+//			+ "    END AS grupoCodUo, "
+//			+ "    SUM(`1_PROVISAO_RECEBIDA`) AS `provisaoRecebida`, "
+//			+ "    SUM(`2_DESPESAS_EMPENHADAS`) AS `despesasEmpenhadas`, "
+//			+ "    SUM(`3_DESPESAS_LIQUIDADAS`) AS `despesasLiquidadas`, "
+//			+ "    SUM(`4_DESPESAS_PAGAS`) AS `despesasPagas` "
+//			+ "FROM `agge_exec_orcamentaria` "
+//			+ "WHERE ANO = 2025 "
+//			+ "GROUP BY grupoCodUo "
+//			+ "ORDER BY grupoCodUo")
+//	List<UnidadeOrcamentaria> getExecucaoOrcamentaria2025();
+	
 	@Query(nativeQuery = true, value = "SELECT "
-			+ "    CASE "
-			+ "        WHEN agge_exec_orcamentaria.COD_UO = 52121 THEN 'Cmdo Ex' "
-			+ "        WHEN agge_exec_orcamentaria.COD_UO = 52921 THEN 'F Ex' "
-			+ "        ELSE 'Destaque' "
-			+ "    END AS grupoCodUo, "
+			+ "    NOME_DESPESA AS grupoCodUo, "
 			+ "    SUM(`1_PROVISAO_RECEBIDA`) AS `provisaoRecebida`, "
 			+ "    SUM(`2_DESPESAS_EMPENHADAS`) AS `despesasEmpenhadas`, "
 			+ "    SUM(`3_DESPESAS_LIQUIDADAS`) AS `despesasLiquidadas`, "
 			+ "    SUM(`4_DESPESAS_PAGAS`) AS `despesasPagas` "
 			+ "FROM `agge_exec_orcamentaria` "
 			+ "WHERE ANO = 2025 "
-			+ "GROUP BY grupoCodUo "
-			+ "ORDER BY grupoCodUo")
+			+ "GROUP BY GRUPO_DESPESA "
+			+ "ORDER BY GRUPO_DESPESA")
 	List<UnidadeOrcamentaria> getExecucaoOrcamentaria2025();
 	
 	@Query(nativeQuery = true, value = "SELECT "
@@ -125,20 +139,40 @@ public interface ExecucaoOrcamentariaRepository extends JpaRepository<ExecucaoOr
 	List<UnidadeOrcamentaria> getExecucaoOrcamentaria2024TipoAcao();
 	
 	@Query(nativeQuery = true, value = "SELECT "
-			+ "    CASE  "
-			+ "        WHEN agge_exec_orcamentaria.COD_UO = 52121 THEN 'Cmdo Ex' "
-			+ "        WHEN agge_exec_orcamentaria.COD_UO = 52921 THEN 'F Ex' "
-			+ "        ELSE 'Destaque' "
-			+ "    END AS grupoCodUo, "
+			+ "    NOME_DESPESA AS grupoCodUo, "
 			+ "    SUM(`1_PROVISAO_RECEBIDA`) AS `provisaoRecebida`, "
 			+ "    SUM(`2_DESPESAS_EMPENHADAS`) AS `despesasEmpenhadas`, "
 			+ "    SUM(`3_DESPESAS_LIQUIDADAS`) AS `despesasLiquidadas`, "
 			+ "    SUM(`4_DESPESAS_PAGAS`) AS `despesasPagas` "
 			+ "FROM `agge_exec_orcamentaria` "
 			+ "WHERE ANO = 2025 AND COD_AO in ('147F', '15W6', '20XE', '20XJ', '14T5', '21D2') "
-			+ "GROUP BY  grupoCodUo "
-			+ "ORDER BY  grupoCodUo")
+			+ "GROUP BY  GRUPO_DESPESA "
+			+ "ORDER BY  GRUPO_DESPESA")
 	List<UnidadeOrcamentaria> getExecucaoOrcamentaria2025TipoAcao();
+	
+	@Query(nativeQuery = true, value = "SELECT  "
+			+ "	COD_AO AS acao,  "
+			+ "	SUM(`1_PROVISAO_RECEBIDA`) AS `provisaoRecebida`,  "
+			+ "	SUM(`2_DESPESAS_EMPENHADAS`) AS `despesasEmpenhadas`,  "
+			+ "	SUM(`3_DESPESAS_LIQUIDADAS`) AS `despesasLiquidadas`,  "
+			+ "	SUM(`4_DESPESAS_PAGAS`) AS `despesasPagas`  "
+			+ "FROM `agge_exec_orcamentaria`  "
+			+ "WHERE ANO = 2024 AND COD_AO in ('20XJ', '14T5', '20XE', '15W6', '147F', '21D2')  "
+			+ "GROUP BY COD_AO  "
+			+ "ORDER BY COD_AO")
+	List<AcaoOrcamentaria> getAcaoOrcamentaria2024();
+	
+	@Query(nativeQuery = true, value = "SELECT  "
+			+ "	COD_AO AS acao,  "
+			+ "	SUM(`1_PROVISAO_RECEBIDA`) AS `provisaoRecebida`,  "
+			+ "	SUM(`2_DESPESAS_EMPENHADAS`) AS `despesasEmpenhadas`,  "
+			+ "	SUM(`3_DESPESAS_LIQUIDADAS`) AS `despesasLiquidadas`,  "
+			+ "	SUM(`4_DESPESAS_PAGAS`) AS `despesasPagas`  "
+			+ "FROM `agge_exec_orcamentaria`  "
+			+ "WHERE ANO = 2025 AND COD_AO in ('20XJ', '14T5', '20XE', '15W6', '147F', '21D2')  "
+			+ "GROUP BY COD_AO  "
+			+ "ORDER BY COD_AO")
+	List<AcaoOrcamentaria> getAcaoOrcamentaria2025();
 	
 	@Query(nativeQuery = true, value = "SELECT  "
 			+ "    COD_ACAO AS tipo, "
@@ -147,4 +181,15 @@ public interface ExecucaoOrcamentariaRepository extends JpaRepository<ExecucaoOr
 			+ "WHERE COD_ACAO IN ('14T5', '147F', '20XE') "
 			+ "GROUP BY tipo")
 	List<TipoAcaoValor> getExecucaoTipoDeAcao();
+	
+	@Query(nativeQuery = true, value = "SELECT "
+			+ "SUM(1_PROVISAO_RECEBIDA) AS provisaoRecebida, "
+			+ "SUM(2_DESPESAS_EMPENHADAS) AS despesasEmpenhadas, "
+			+ "SUM(3_DESPESAS_LIQUIDADAS) AS despesasLiquidadas, "
+			+ "SUM(4_DESPESAS_PAGAS) AS despesasPagas "
+			+ "FROM sg7.agge_exec_orcamentaria "
+			+ "WHERE ANO = 2025")
+	SomaOrcamentaria getSomaOrcamentaria();
+	
+	
 }

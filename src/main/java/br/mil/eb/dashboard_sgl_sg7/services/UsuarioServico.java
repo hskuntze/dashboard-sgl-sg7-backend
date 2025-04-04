@@ -109,10 +109,10 @@ public class UsuarioServico implements UserDetailsService {
 				Usuario usuario = new Usuario();
 				
 				if(dto.getTipo().equals("Militar")) {
-					Posto p = postoRepositorio.getReferenceById(dto.getPosto().getId());
+					Posto p = postoRepositorio.findById(dto.getPosto().getId()).orElseThrow(() -> new RecursoNaoEncontradoException("Não foi possível encontrar Posto com ID " + dto.getPosto().getId()));
 					usuario.setPosto(p);
 					
-					OM om = omRepositorio.getReferenceById(dto.getOm().getId());
+					OM om = omRepositorio.findById(dto.getOm().getCodigo()).orElseThrow(() -> new RecursoNaoEncontradoException("Não foi possível encontrar OM com ID " + dto.getOm().getCodigo()));
 					usuario.setOm(om);
 				}
 				

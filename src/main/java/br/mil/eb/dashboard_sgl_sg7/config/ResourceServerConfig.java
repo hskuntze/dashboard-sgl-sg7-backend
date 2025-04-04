@@ -88,10 +88,11 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration corsConfig = new CorsConfiguration();
 		corsConfig.setAllowedOrigins(Arrays.asList("http://localhost:3000", 
-				"http://172.20.71.150:3000", 
+				"http://172.20.71.103:3000", 
 				"http://localhost:3001", 
-				"http://172.20.71.150:3001", 
-				"http://10.134.0.163:82", 
+				"http://172.20.71.103:3001", 
+				"http://10.134.0.163:80", 
+				"http://10.134.0.163", 
 				"http://10.134.0.163:83"));
 		corsConfig.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE", "PATCH"));
 		corsConfig.setAllowCredentials(true);

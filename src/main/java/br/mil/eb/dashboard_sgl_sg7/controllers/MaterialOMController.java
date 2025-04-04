@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 import br.mil.eb.dashboard_sgl_sg7.dto.CategoriaMaterialIndisponivelDTO;
 import br.mil.eb.dashboard_sgl_sg7.dto.GeoreferenciamentoCmdoDTO;
 import br.mil.eb.dashboard_sgl_sg7.dto.GeoreferenciamentoUnidadeDTO;
+import br.mil.eb.dashboard_sgl_sg7.dto.MaterialIndisponivelDTO;
 import br.mil.eb.dashboard_sgl_sg7.dto.QtdIndisponivelPorBdaDTO;
 import br.mil.eb.dashboard_sgl_sg7.dto.QtdMaterialBdaDTO;
 import br.mil.eb.dashboard_sgl_sg7.dto.QtdMaterialCidadeEstadoDTO;
 import br.mil.eb.dashboard_sgl_sg7.dto.QtdMaterialCmdoDTO;
+import br.mil.eb.dashboard_sgl_sg7.dto.QtdMaterialDisponibilidadeCmdoDTO;
 import br.mil.eb.dashboard_sgl_sg7.dto.QtdMaterialDisponibilidadeDTO;
 import br.mil.eb.dashboard_sgl_sg7.dto.QtdMaterialRmDTO;
 import br.mil.eb.dashboard_sgl_sg7.dto.QtdMaterialSubsistemaDTO;
@@ -123,7 +125,8 @@ public class MaterialOMController {
 	}
 
 	@GetMapping(value = "/qtd/disponibilidade")
-	@Operation(tags = { "/materiaisom" }, description = "Retorna o total de materiais por disponibilidade (disponível ou indisponível).")
+	@Operation(tags = {
+			"/materiaisom" }, description = "Retorna o total de materiais por disponibilidade (disponível ou indisponível).")
 	public ResponseEntity<List<QtdMaterialDisponibilidadeDTO>> getQuantidadeMaterialDisponibilidade() {
 		return ResponseEntity.ok().body(materialOmServico.getQuantidadeMaterialDisponibilidade());
 	}
@@ -159,46 +162,71 @@ public class MaterialOMController {
 	}
 
 	@GetMapping(value = "/qtd/subsistema/{cmdo}")
-	@Operation(tags = { "/materiaisom" }, description = "Retorna o total de materiais por subsistema de acordo com o comando.", parameters = {
-			@Parameter(name = "cmdo", description = "Comando") })
-	public ResponseEntity<List<QtdMaterialSubsistemaDTO>> getQuantidadeMaterialSubsistemaPorCmdo(@PathVariable String cmdo) {
+	@Operation(tags = {
+			"/materiaisom" }, description = "Retorna o total de materiais por subsistema de acordo com o comando.", parameters = {
+					@Parameter(name = "cmdo", description = "Comando") })
+	public ResponseEntity<List<QtdMaterialSubsistemaDTO>> getQuantidadeMaterialSubsistemaPorCmdo(
+			@PathVariable String cmdo) {
 		return ResponseEntity.ok().body(materialOmServico.getQuantidadeMaterialSubsistemaPorCmdo(cmdo));
 	}
 
+	@GetMapping(value = "/qtd/subsistema/bda")
+	@Operation(tags = {
+			"/materiaisom" }, description = "Retorna o total de materiais por subsistema de acordo com a brigada.", parameters = {
+					@Parameter(name = "cmdo", description = "Comando") })
+	public ResponseEntity<List<QtdMaterialSubsistemaDTO>> getQuantidadeMaterialSubsistemaPorBda(
+			@RequestParam String cmdo, @RequestParam String bda) {
+		return ResponseEntity.ok().body(materialOmServico.getQuantidadeMaterialSubsistemaPorBda(cmdo, bda));
+	}
+
 	@GetMapping(value = "/qtd/ufcmdo/{cmdo}")
-	@Operation(tags = { "/materiaisom" }, description = "Retorna o total de materiais por uf de acordo com o comando.", parameters = {
-			@Parameter(name = "cmdo", description = "Comando") })
+	@Operation(tags = {
+			"/materiaisom" }, description = "Retorna o total de materiais por uf de acordo com o comando.", parameters = {
+					@Parameter(name = "cmdo", description = "Comando") })
 	public ResponseEntity<List<QtdMaterialCidadeEstadoDTO>> getQuantidadeUfPorCmdo(@PathVariable String cmdo) {
 		return ResponseEntity.ok().body(materialOmServico.getQuantidadeUfPorCmdo(cmdo));
 	}
 
 	@GetMapping(value = "/qtd/rmcmdo/{cmdo}")
-	@Operation(tags = { "/materiaisom" }, description = "Retorna o total de materiais por região militar de acordo com o comando.", parameters = {
-			@Parameter(name = "cmdo", description = "Comando") })
+	@Operation(tags = {
+			"/materiaisom" }, description = "Retorna o total de materiais por região militar de acordo com o comando.", parameters = {
+					@Parameter(name = "cmdo", description = "Comando") })
 	public ResponseEntity<List<QtdMaterialRmDTO>> getQuantidadeRmPorCmdo(@PathVariable String cmdo) {
 		return ResponseEntity.ok().body(materialOmServico.getQuantidadeRmPorCmdo(cmdo));
 	}
 
 	@GetMapping(value = "/qtd/bdacmdo/{cmdo}")
-	@Operation(tags = { "/materiaisom" }, description = "Retorna o total de materiais por brigada de acordo com o comando.", parameters = {
-			@Parameter(name = "cmdo", description = "Comando") })
+	@Operation(tags = {
+			"/materiaisom" }, description = "Retorna o total de materiais por brigada de acordo com o comando.", parameters = {
+					@Parameter(name = "cmdo", description = "Comando") })
 	public ResponseEntity<List<QtdMaterialBdaDTO>> getQuantidadeBdaPorCmdo(@PathVariable String cmdo) {
 		return ResponseEntity.ok().body(materialOmServico.getQuantidadeBdaPorCmdo(cmdo));
 	}
 
 	@GetMapping(value = "/qtd/indisponivelbdacmdo/{cmdo}")
-	@Operation(tags = { "/materiaisom" }, description = "Retorna o total de materiais indisponíveis por brigada de acordo com o comando.", parameters = {
-			@Parameter(name = "cmdo", description = "Comando") })
+	@Operation(tags = {
+			"/materiaisom" }, description = "Retorna o total de materiais indisponíveis por brigada de acordo com o comando.", parameters = {
+					@Parameter(name = "cmdo", description = "Comando") })
 	public ResponseEntity<List<QtdIndisponivelPorBdaDTO>> getIndisponivelPorBdaPorCmdo(@PathVariable String cmdo) {
 		return ResponseEntity.ok().body(materialOmServico.getIndisponivelPorBdaPorCmdo(cmdo));
 	}
 
 	@GetMapping(value = "/qtd/ctgmtindisponivelcmdo/{cmdo}")
-	@Operation(tags = { "/materiaisom" }, description = "Retorna o total de materiais indisponíveis por categoria de material de acordo com o comando.", parameters = {
-			@Parameter(name = "cmdo", description = "Comando") })
+	@Operation(tags = {
+			"/materiaisom" }, description = "Retorna o total de materiais indisponíveis por categoria de material de acordo com o comando.", parameters = {
+					@Parameter(name = "cmdo", description = "Comando") })
 	public ResponseEntity<List<CategoriaMaterialIndisponivelDTO>> getCategoriaMateriaisIndisponiveisPorCmdo(
 			@PathVariable String cmdo) {
 		return ResponseEntity.ok().body(materialOmServico.getCategoriaMateriaisIndisponiveisPorCmdo(cmdo));
+	}
+
+	@GetMapping(value = "/qtd/ctgmtindisponivelcmdo/bda")
+	@Operation(tags = {
+			"/materiaisom" }, description = "Retorna o total de materiais indisponíveis por categoria de material de acordo com a brigada.", parameters = {
+					@Parameter(name = "bda", description = "Comando") })
+	public ResponseEntity<List<CategoriaMaterialIndisponivelDTO>> getCategoriaMateriaisIndisponiveisPorBda(
+			@RequestParam String cmdo, @RequestParam String bda) {
+		return ResponseEntity.ok().body(materialOmServico.getCategoriaMateriaisIndisponiveisPorBda(cmdo, bda));
 	}
 
 	@GetMapping(value = "/georef/unidades")
@@ -208,8 +236,9 @@ public class MaterialOMController {
 	}
 
 	@GetMapping(value = "/georef/unidades/{cmdo}")
-	@Operation(tags = { "/materiaisom" }, description = "Retorna os pontos de georeferência dos equipamentos de acordo com o comando", parameters = {
-			@Parameter(name = "cmdo", description = "Comando") })
+	@Operation(tags = {
+			"/materiaisom" }, description = "Retorna os pontos de georeferência dos equipamentos de acordo com o comando", parameters = {
+					@Parameter(name = "cmdo", description = "Comando") })
 	public ResponseEntity<List<GeoreferenciamentoUnidadeDTO>> getGeorefUnidadesPorCmdo(@PathVariable String cmdo) {
 		return ResponseEntity.ok().body(materialOmServico.getGeorefUnidadesPorCmdo(cmdo));
 	}
@@ -221,8 +250,9 @@ public class MaterialOMController {
 	}
 
 	@GetMapping(value = "/georef/cmdo/{cmdo}")
-	@Operation(tags = { "/materiaisom" }, description = "Retorna os pontos de georeferência do comando de acordo com o comando", parameters = {
-			@Parameter(name = "cmdo", description = "Comando") })
+	@Operation(tags = {
+			"/materiaisom" }, description = "Retorna os pontos de georeferência do comando de acordo com o comando", parameters = {
+					@Parameter(name = "cmdo", description = "Comando") })
 	public ResponseEntity<List<GeoreferenciamentoCmdoDTO>> getQtdGeorefPorCmdo(@PathVariable String cmdo) {
 		return ResponseEntity.ok().body(materialOmServico.getQtdGeorefPorCmdo(cmdo));
 	}
@@ -234,20 +264,55 @@ public class MaterialOMController {
 	}
 
 	@GetMapping(value = "/qtd/tipoeqp/{cmdo}")
-	@Operation(tags = { "/materiaisom" }, description = "Retorna a quantidade de materiais existentes e previstos de acordo com o comando", parameters = {
-			@Parameter(name = "cmdo", description = "Comando") })
+	@Operation(tags = {
+			"/materiaisom" }, description = "Retorna a quantidade de materiais existentes e previstos de acordo com o comando", parameters = {
+					@Parameter(name = "cmdo", description = "Comando") })
 	public ResponseEntity<List<QtdMaterialTipoEqpDTO>> getQtdMaterialExistentePrevistoPorCmdo(
 			@PathVariable String cmdo) {
 		return ResponseEntity.ok().body(materialOmServico.getQtdMaterialExistentePrevistoPorCmdo(cmdo));
 	}
-	
+
+	@GetMapping(value = "/qtd/tipoeqp/bda")
+	@Operation(tags = {
+			"/materiaisom" }, description = "Retorna a quantidade de materiais existentes e previstos de acordo com a brigada", parameters = {
+					@Parameter(name = "cmdo", description = "Comando") })
+	public ResponseEntity<List<QtdMaterialTipoEqpDTO>> getQtdMaterialExistentePrevistoPorBda(@RequestParam String cmdo,
+			@RequestParam String bda) {
+		return ResponseEntity.ok().body(materialOmServico.getQtdMaterialExistentePrevistoPorBda(cmdo, bda));
+	}
+
 	@GetMapping(value = "/diariaspassagens/classificacao")
 	public ResponseEntity<List<ValorTotalClassificacaoDiariasPassagensDTO>> getValorTotalClassificacaoDiariasPassagens() {
 		return ResponseEntity.ok().body(materialOmServico.getValorTotalClassificacaoDiariasPassagens());
 	}
-	
+
 	@GetMapping(value = "/diariaspassagens/codao")
 	public ResponseEntity<List<ValorTotalCodAoDiariasPassagensDTO>> getValorTotalCodAoDiariasPassagens() {
 		return ResponseEntity.ok().body(materialOmServico.getValorTotalCodAoDiariasPassagens());
+	}
+
+	@GetMapping(value = "/qtd/material/cmdo")
+	public ResponseEntity<List<QtdMaterialDisponibilidadeCmdoDTO>> getMaterialDisponibilidadePorCmdo() {
+		return ResponseEntity.ok().body(materialOmServico.getMaterialDisponibilidadePorCmdo());
+	}
+
+	@GetMapping(value = "/qtd/material/cmdo/{cmdo}")
+	public ResponseEntity<List<QtdMaterialDisponibilidadeCmdoDTO>> getMaterialDisponibilidadePorCmdo(
+			@PathVariable String cmdo) {
+		return ResponseEntity.ok().body(materialOmServico.getMaterialDisponibilidadePorCmdo(cmdo));
+	}
+
+	@GetMapping(value = "/qtd/material/cmdo/bda")
+	public ResponseEntity<List<QtdMaterialDisponibilidadeCmdoDTO>> getMaterialDisponibilidadePorBda(
+			@RequestParam String cmdo, @RequestParam String bda) {
+		return ResponseEntity.ok().body(materialOmServico.getMaterialDisponibilidadePorBda(cmdo, bda));
+	}
+
+	@GetMapping(value = "/indisp")
+	public ResponseEntity<Page<MaterialIndisponivelDTO>> getMateriaisIndisponiveis(
+			Pageable pageable,
+			@RequestParam(defaultValue = "") String eqp, 
+			@RequestParam(defaultValue = "") String bda) {
+		return ResponseEntity.ok().body(materialOmServico.getMaterialIndisponivel(pageable, eqp, bda));
 	}
 }
